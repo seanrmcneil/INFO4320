@@ -1,0 +1,210 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+</head>
+
+<style>
+.submit{
+  background-color: #008080;
+  font-size:14pt;
+  width: 100px;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+}
+</style>
+<body>
+
+
+
+<script type="text/javascript">
+function initTouchCanvas() {
+    var datadiv = document.getElementById('datadiv');
+  datadiv.style.display = 'none';
+    var canvas = document.getElementById("mycanvas");
+  canvas.style.display = 'block';
+    canvas.addEventListener("touchstart", draw, false);
+  canvas.addEventListener("mousedown", drawMouse, false);
+
+}
+
+
+
+  function draw(event) {
+  
+   var canvas = document.getElementById('mycanvas');
+    var offset  = getOffset(canvas);
+    var datadiv = document.getElementById('datadiv');
+    //datadiv.innerHTML = 'offsetLeft: ' + offset.left + ', offsetTop: ' + offset.top;
+    if (canvas.getContext) {
+      var ctx = canvas.getContext("2d");
+ 
+
+   ctx.fillStyle = '#ff0000';
+   ctx.fillRect(event.touches[0].pageX-offset.left, event.touches[0].pageY-offset.top, 5, 5);
+
+   
+  }
+ }
+ 
+  function drawMouse(event) {
+  
+   var canvas = document.getElementById('mycanvas');
+    var offset  = getOffset(canvas);
+    var datadiv = document.getElementById('datadiv');
+
+    if (canvas.getContext) {
+      var ctx = canvas.getContext("2d");
+
+   ctx.fillStyle = '#ff0000';
+   ctx.fillRect(event.pageX-offset.left, event.pageY-offset.top, 5, 5);
+
+  }
+ } 
+ 
+
+function getOffset(obj) {
+    var offsetLeft = 0;
+  var offsetTop = 0;
+    do {
+      if (!isNaN(obj.offsetLeft)) {
+          offsetLeft += obj.offsetLeft;
+      }
+      if (!isNaN(obj.offsetTop)) {
+          offsetTop += obj.offsetTop;
+      }   
+    } while(obj = obj.offsetParent );
+    return {left: offsetLeft, top: offsetTop};
+}  
+  
+</script>
+
+
+<script type="text/javascript">
+
+
+
+</script><p><canvas id="touchmovezone" width="400" height="600" style="border: 1px solid #ccc;display: block"><br />
+Canvas element not supported<br />
+</canvas><br />
+<br />
+</p>
+Send a number to your Photon!<br>
+<div class="submit"> Submit </submit>
+</form>
+
+
+</body>
+
+<script>
+(function() {
+   // your page initialization code here
+   // the DOM will be available here
+   initTouchMoveCanvas();
+
+   var touchmovezone;
+var touchmovectx;
+var lastPt=null;
+
+var pointsArrays = [];
+
+function initTouchMoveCanvas() {
+  //touchmovelink = document.getElementById("touchmovelink");
+  touchmovezone = document.getElementById("touchmovezone");
+  //touchmovelink.style.display = 'none';
+  touchmovezone.style.display = 'block';
+  
+  touchmovezone.addEventListener("touchmove", drawtouchmove, false);
+  touchmovezone.addEventListener("touchend", endtouchmove, false);
+  
+  touchmovezone.addEventListener("mousedown", function() {
+    touchmovezone.addEventListener("mousemove", drawmousemove, false);
+  }
+  , false);
+  touchmovezone.addEventListener("mouseup", endmousemove, false);
+  touchmovectx = touchmovezone.getContext("2d");
+
+}
+
+  function drawtouchmove(e) { 
+    e.preventDefault();
+    var offset  = getOffset(touchmovezone);
+      if(lastPt!=null) {
+        touchmovectx.beginPath();
+        touchmovectx.moveTo(lastPt.x-offset.left, lastPt.y-offset.top);
+        touchmovectx.lineTo(e.touches[0].pageX-offset.left, e.touches[0].pageY-offset.top);
+    touchmovectx.strokeStyle = 'purple';
+    touchmovectx.lineWidth = 3;
+        touchmovectx.stroke();
+      }
+      lastPt = {x:e.touches[0].pageX, y:e.touches[0].pageY};
+  }
+  
+  
+  function drawmousemove(e) {
+    e.preventDefault();
+    var offset  = getOffset(touchmovezone);
+      if(lastPt!=null) {
+        touchmovectx.beginPath();
+        touchmovectx.moveTo(lastPt.x-offset.left, lastPt.y-offset.top);
+        touchmovectx.lineTo(e.pageX-offset.left, e.pageY-offset.top);
+    touchmovectx.strokeStyle = 'purple';
+    touchmovectx.lineWidth = 3;
+        touchmovectx.stroke();
+      }
+      lastPt = {x:e.pageX, y:e.pageY};
+
+      pointsArrays.push([e.pageX, e.pageY]);
+      //document.getElementById('sendcode').value = JSON.stringify(pointsArrays);
+      return pointsArrays;
+
+  }
+
+  function endtouchmove(e) {
+    e.preventDefault();
+    lastPt = null;
+  }  
+
+  function endmousemove(e) {
+    e.preventDefault();
+  touchmovezone.removeEventListener("mousemove", drawmousemove, false); 
+    lastPt = null;
+    pointsArrays.push(["u", "u"]);
+  }
+
+  String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
+
+$('.submit').click(function(){
+
+  x_coords=[];
+  y_coords=[];
+
+  for (s=0; s< pointsArrays.length; s++){
+    x_coords.push(pointsArrays[s][0]);
+    y_coords.push(pointsArrays[s][1]);
+  }
+
+  console.log(x_coords.toString());
+  console.log(y_coords.toString());
+  console.log("x"+x_coords.toString() + ",y" + y_coords.toString() +",");
+  $.post( "https://api.particle.io/v1/devices/1e002c000347343337373739/draw?access_token=f64f2ffbb6dad44fd4e148a3b13371a0d1a7f1cc", { data: "x"+x_coords.toString() + ",y" + y_coords.toString() +","})
+  .done(function( data ) {
+     // $.post( "https://api.particle.io/v1/devices/1e002c000347343337373739/draw?access_token=f64f2ffbb6dad44fd4e148a3b13371a0d1a7f1cc", { data:  y_coords.toString() })
+
+  });
+
+
+})
+   
+
+})();
+</script>
+</html>
