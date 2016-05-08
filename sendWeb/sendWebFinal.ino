@@ -14,8 +14,11 @@ int motorStepPinX = D0; //step pin - white
 int motorDirPinY = D3; //direction pin - black
 int motorStepPinY = D4; //step pin - white
 
-int screenX = 300;
-int screenY = 600;
+int screenX = 300; //width of canvas element from touch.html
+int screenY = 600; //
+
+const int servoPin = RX;
+Servo servo;
 
 //set up the accelStepper intance
 //the "1" tells it we are using a driver
@@ -36,6 +39,9 @@ void setup() {
   stepperY.setMaxSpeed(1000);
   stepperY.setSpeed(motorSpeedY);
   stepperY.setAcceleration(motorAccelY);
+
+  servo.attach(servoPin);
+  servo.write(0);
 }
 
 //int array_size = 0;
@@ -112,9 +118,9 @@ for (int i= 0; i < array_size; i++){
 }
 
 //moveMotor(xArray, yArray, array_size);
-int testX[] = {150, 0, 0};
-int testY[] = {150, 0, 0};
-moveMotor(testX, testY, 3);
+int testX[] = {150, 0, 0, 942682160, 150, 0};
+int testY[] = {150, 0, 0, 942682160, 150, 0};
+moveMotor(testX, testY, 6);
 
 }
 
@@ -128,6 +134,7 @@ void moveMotor(int xArray[], int yArray[], int array_size){
       motorstep++;
       if (xArray[motorstep] == 942682160){
         Serial.println("lift pen!");
+        servo.write(95);
         delay(500);
         //lift pen
       }
@@ -137,6 +144,7 @@ void moveMotor(int xArray[], int yArray[], int array_size){
       stepperX.moveTo(x_mapped);
       stepperY.moveTo(y_mapped);
       //put down pen if it was lifted
+
       }
     }
 
@@ -146,6 +154,7 @@ void moveMotor(int xArray[], int yArray[], int array_size){
   else{
     coord_remaining = false;
     Serial.print("ended");
+    Serial.println("y");
     resetMotors();
     }
   }
