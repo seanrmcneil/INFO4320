@@ -196,6 +196,7 @@ void moveMotor(int xArray[], int yArray[], int array_size){
 }
 
 void resetMotors (){
+  message = "";
   stepperX.runToNewPosition(0);
   stepperX.disableOutputs();
   stepperY.runToNewPosition(0);
