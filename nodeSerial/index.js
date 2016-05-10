@@ -42,7 +42,6 @@ port.on('open', function() {
   port.on('data', function(){
     console.log('got a star');
     if (j >= split_coords.length) return;
-    //console.log('got something');
     j++;
     if (j === split_coords.length) {
       console.log('sent');
