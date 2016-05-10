@@ -137,8 +137,26 @@
                 x: e.pageX,
                 y: e.pageY
             };
-            x_coords.push(e.pageX);
-            y_coords.push(e.pageY);
+
+            if(x_coords.length > 2){
+                if(e.pageX == x_coords[x_coords.length-2] && e.pageX == x_coords[x_coords.length-2]){
+                    x_coords[x_coords.length-1] = e.pageX;
+                    y_coords[y_coords.length-1] = e.pageY;
+                }else if(e.pageY == y_coords[y_coords.length-2] && e.pageY == y_coords[y_coords.length-2]){
+                    x_coords[x_coords.length-1] = e.pageX;
+                    y_coords[y_coords.length-1] = e.pageY;
+                }
+                else{
+                    x_coords.push(e.pageX);
+                    y_coords.push(e.pageY);
+                }
+            }else{
+                x_coords.push(e.pageX);
+                y_coords.push(e.pageY);
+            }
+
+            console.log(x_coords, y_coords);
+
         }
 
         function endtouchmove(e) {
