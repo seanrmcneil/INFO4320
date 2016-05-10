@@ -138,18 +138,40 @@
                 y: e.pageY
             };
 
+            var xcoords_2 = x_coords[x_coords.length-2]; //x coordinate in the array at -2 from current location
+            var xcoords_1 = x_coords[x_coords.length-1]; //x coordinate at -1  (last spot in the array)
+            var ycoords_2 = y_coords[y_coords.length-2]; //y coordinate at -2
+            var ycoords_1 = y_coords[y_coords.length-1]; //y coordinate at -1 (last spot in array)
+
+            //calculate the slope between spot at -2 and -1
+            var oldslope = calcSlope(xcoords_2, xcoords_1, ycoords_2, ycoords_1);
+
+            //calculate the clope between the last number in array and the current point 
+            var currentslope = calcSlope(xcoords_1, e.pageX, ycoords_1, e.pageY);
+
+            //if the array is long enough to look at previos points 
             if(x_coords.length > 2){
-                if(e.pageX == x_coords[x_coords.length-2] && e.pageX == x_coords[x_coords.length-2]){
+                //if the last two coordinates are the same as the current coordinate, overwrite the last coordinate to the current
+                //i.e if A-B-C are the same, cahnge to A-C only
+                if(e.pageX == xcoords_2 && e.pageX == xcoords_1){
                     x_coords[x_coords.length-1] = e.pageX;
                     y_coords[y_coords.length-1] = e.pageY;
-                }else if(e.pageY == y_coords[y_coords.length-2] && e.pageY == y_coords[y_coords.length-2]){
+                }//same thing for Y
+                else if(e.pageY == ycoords_2 && e.pageY == ycoords_1){
+                    x_coords[x_coords.length-1] = e.pageX;
+                    y_coords[y_coords.length-1] = e.pageY;
+                }//if the old slope is = to the current slope, overwrite the last coordinate to the current
+                //i.e. if slope between A-B is equal to B-C then delete B and just have slope A-C
+                else if (oldslope == currentslope){
                     x_coords[x_coords.length-1] = e.pageX;
                     y_coords[y_coords.length-1] = e.pageY;
                 }
+                //otherweise add cordinates because we need them
                 else{
                     x_coords.push(e.pageX);
                     y_coords.push(e.pageY);
                 }
+            //if there are not more than 2 coordinates, add them.
             }else{
                 x_coords.push(e.pageX);
                 y_coords.push(e.pageY);
@@ -173,7 +195,14 @@
             document.getElementById("coords").value = ("x"+x_coords.toString() + ",y" + y_coords.toString() +",e");
         }
 
+        //calculate the slope of the line
+        function calcSlope(x1, x2, y1, y2){
+            var slope = ((y2-y1)/(x2-x1));
+            return slope;
+        }
+
     })();
+
 </script>
 
 </html>
