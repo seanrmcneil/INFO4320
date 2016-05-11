@@ -14,8 +14,8 @@ int motorStepPinX = D0; //step pin - white
 int motorDirPinY = D3; //direction pin - black
 int motorStepPinY = D4; //step pin - white
 
-int screenX = 510; //width of canvas element from touch.html
-int screenY = 660; //
+int screenX = 550; //width of canvas element from touch.html
+int screenY = 825; //
 
 const int servoPin = RX;
 Servo servo;
@@ -170,7 +170,7 @@ void moveMotor(int xArray[], int yArray[], int array_size){
         delay(1000);
       }
       else {
-      int y_mapped = map(yArray[motorstep], 0, screenY, 0, 1120);
+      int y_mapped = map(yArray[motorstep], 0, screenY, 0, 1297);
       int x_mapped = map(xArray[motorstep], 0, screenX, 0, -865);
       stepperX.moveTo(x_mapped);
       stepperY.moveTo(y_mapped);
