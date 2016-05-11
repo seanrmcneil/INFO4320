@@ -2,10 +2,10 @@
 
 //Positive motor steps == total motors
 
-int motorSpeedX = 250; //Here you can set the steps per second (about 3rps / at 16 microsteps)
+int motorSpeedX = 500; //Here you can set the steps per second (about 3rps / at 16 microsteps)
 int motorAccelX = 80000; //Here you can set the acceleration Speed steps/second/second to accelerate
 
-int motorSpeedY = 250;
+int motorSpeedY = 500;
 int motorAccelY = 80000;
 
 int motorDirPinX = D1; //direction pin - black
@@ -31,11 +31,11 @@ void setup()
 {
   Serial.begin(9600);
   Serial.flush();
-  stepperX.setMaxSpeed(1000); //max speed the motor will go to
+  stepperX.setMaxSpeed(500); //max speed the motor will go to
   stepperX.setSpeed(motorSpeedX); //the actual speed the motor will go (right now the same as the max speed)
   stepperX.setAcceleration(motorAccelX);//how much the motor will accelerate (not using right now)
 
-  stepperY.setMaxSpeed(1000);
+  stepperY.setMaxSpeed(500);
   stepperY.setSpeed(motorSpeedY);
   stepperY.setAcceleration(motorAccelY);
 
@@ -167,7 +167,7 @@ void moveMotor(int xArray[], int yArray[], int array_size){
         servo.write(penUp);
         pen_up = true;
         reached_putdown = false;
-        delay(1000);
+        delay(500);
       }
       else {
       int y_mapped = map(yArray[motorstep], 0, screenY, 0, 1297);
@@ -178,7 +178,7 @@ void moveMotor(int xArray[], int yArray[], int array_size){
       if(pen_up && reached_putdown){
         servo.write(penDown);
         pen_up = false;
-        delay(1000);
+        delay(500);
       }
     }else if(!reached_putdown){
       reached_putdown = true;
