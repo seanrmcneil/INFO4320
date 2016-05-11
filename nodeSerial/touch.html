@@ -146,10 +146,10 @@
             //calculate the slope between spot at -2 and -1
             var oldslope = calcSlope(xcoords_2, xcoords_1, ycoords_2, ycoords_1);
 
-            //calculate the clope between the last number in array and the current point 
+            //calculate the clope between the last number in array and the current point
             var currentslope = calcSlope(xcoords_1, e.pageX, ycoords_1, e.pageY);
 
-            //if the array is long enough to look at previos points 
+            //if the array is long enough to look at previos points
             if(x_coords.length > 2){
                 //if the last two coordinates are the same as the current coordinate, overwrite the last coordinate to the current
                 //i.e if A-B-C are the same, cahnge to A-C only
@@ -192,7 +192,7 @@
             lastPt = null;
             x_coords.push("u");
             y_coords.push("u");
-            document.getElementById("coords").value = ("x"+x_coords.toString() + ",y" + y_coords.toString() +",");
+            document.getElementById("coords").value = ("x"+x_coords.toString() + ",y" + y_coords.toString() +",e");
         }
 
         //calculate the slope of the line
