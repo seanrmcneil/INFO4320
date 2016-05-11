@@ -194,6 +194,8 @@ $('.submit').click(function(){
 
   console.log(x_coords.toString());
   console.log(y_coords.toString());
+  console.log(x_coords.length)
+  console.log(y_coords.length)
   console.log("x"+x_coords.toString() + ",y" + y_coords.toString() +",");
   $.post( "https://api.particle.io/v1/devices/1e002c000347343337373739/draw?access_token=f64f2ffbb6dad44fd4e148a3b13371a0d1a7f1cc", { data: "x"+x_coords.toString() + ",y" + y_coords.toString() +","})
   .done(function( data ) {
